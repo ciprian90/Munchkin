@@ -1,0 +1,126 @@
+package Client;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import GUI.LoginJPanel;
+
+import states.LoginState;
+import utility.Constants;
+import utility.Utility;
+
+
+import java.io.*;
+import java.net.UnknownHostException;
+
+/**
+ * WebMunchkin Login Client. Baut eine SSL (Secure Sockets Layer) gesicherte Verbindung zum
+ * WebMunchkinServer auf.
+ * 
+ * @author Marius Kleiner, Dirk Kleiner
+ * @version 0.1a
+ *
+ */
+public class Client extends JFrame{
+	
+	// Klassenvariablen
+	static InputStream inputstream = null;
+	static InputStreamReader inputstreamreader = null;
+	static BufferedReader bufferedreader = null;
+	static OutputStream outputstream = null;
+	static SSLSocket sslsocket = null;
+	static ObjectOutputStream objOutStream = null;
+	static Object state = null;
+	static ObjectInputStream objInStream = null;
+	static JFrame jFrame = null;
+	static JPanel jPanel = null;
+	static boolean close = false;
+	
+	public static void main(String[] arstring) {
+		// Überprüfe Parameter
+    	checkParameters(arstring);
+    	
+    	// Client Verbindung
+    	serverConnection();
+    }
+
+	/**
+	 * Baue eine Verbindung auf
+	 */
+	private static void serverConnection() {
+		Utility.debugMsg("Trying to establish server connection...");
+		try {
+			// Setze SystemProperties für das Laden und öffnen der Zertifikatdatei
+	    	// Bekanntgabe des Zertifikatpfades (relativ) an das System
+	        System.setProperty("javax.net.ssl.trustStore", Constants.certificate_path);
+	        // Bekanntgabe des Zertifikatpassworts an das System
+	        System.setProperty("javax.net.ssl.trustStorePassword", Constants.certificate_pw);
+	        
+	        // Erstelle einen SSL Socket für die Web-/Netz-Kommunikation
+	        SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+			sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", Constants.port);
+			
+	        // Erstelle einen Inputstream für Konsoleneingabe
+	        inputstream = System.in;
+	        inputstreamreader = new InputStreamReader(inputstream);
+	        bufferedreader = new BufferedReader(inputstreamreader);
+	        // Erstelle Outputstream
+	        outputstream = sslsocket.getOutputStream();	
+	        objOutStream = new ObjectOutputStream(outputstream);
+	        // Erstelle Inputstream
+	        inputstream = sslsocket.getInputStream();
+			objInStream = new ObjectInputStream(inputstream);
+			
+			// Verbindung wurde aufgebaut....
+			Utility.debugMsg("Server connection established");
+			
+			// Fenster öffnen
+			Utility.debugMsg("Create Window");
+			jFrame = new JFrame();
+			
+	    	// State & Panel
+			state = new LoginState(objOutStream, objInStream);
+			jPanel = new LoginJPanel(jFrame, (LoginState)state);
+			while (jFrame.isVisible()) {
+				
+			}
+			state = null;
+	        
+	        //
+	        Utility.debugMsg("Client wird beendet...");
+	        
+		} catch (UnknownHostException e) {
+			Utility.errorMsg("Couldn't establish connection to server (unknown host)", e);
+		} catch (IOException e) {
+			Utility.errorMsg("Couldn't establish connection to server (ioException)", e);
+		}finally{
+			// Release alle gebundenen Ressourcen
+			try {
+				outputstream.close();
+			} catch (IOException e) {
+				outputstream = null;
+			}
+			try {
+				inputstream.close();
+			} catch (IOException e) {
+				inputstream = null;
+			}
+		}
+
+	}
+
+	/**
+     * Überprüfe und verarbeite die gesetzten Programmparameter 
+     */
+    private static void checkParameters(String[] arstring) {
+    	// Check known parameters in arstring
+    	for (String val : arstring) {
+    		if (val.equals(Constants.parameter_debug)) {
+    	    	Utility.debug = true;
+    	    	Utility.debugMsg("Running in debug-mode");
+    		}
+    		
+    	}
+    }
+}

@@ -1,0 +1,51 @@
+package states;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import javax.swing.JPanel;
+
+import utility.ComMsg;
+import utility.Utility;
+
+/**
+ * Diese Klasse repräsentiert den Zustand des Programms während dem Einloggen
+ * 
+ * @author Marius Kleiner, Dirk Kleiner
+ * @version 0.1a
+ *
+ */
+public class LoginState extends javax.swing.JPanel{
+	
+	// Klassenvariablen
+	private ObjectOutputStream objOutStream = null;
+	private ObjectInputStream objInStream = null;
+
+	/**
+	 * Konstruktor
+	 * @param objOutStream
+	 * @param objInStream
+	 */
+	public LoginState(ObjectOutputStream objOutStream, ObjectInputStream objInStream) {
+		// Setze Variablen
+		this.objInStream = objInStream;
+		this.objOutStream = objOutStream;
+	}
+	
+	/**
+	 * Führe eine LoginAnfrage durch
+	 */
+	public boolean doLoginRequest() {
+		try {
+			ComMsg loginMsg = new ComMsg(ComMsg.com_authentication_request, "deadjack|display99");
+			Utility.debugMsg("Sending authentication login data...");
+			objOutStream.writeObject(loginMsg);
+			return true;
+		} catch (IOException e) {
+			Utility.errorMsg("Couldn't connect to Server", e);
+		}
+		return false;
+	}
+
+}

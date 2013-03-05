@@ -1,0 +1,9 @@
+package Client;
+
+public class LoginMode {
+
+	public LoginMode() {
+		
+	}
+
+}

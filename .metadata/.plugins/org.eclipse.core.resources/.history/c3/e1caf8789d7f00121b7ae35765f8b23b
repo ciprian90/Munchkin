@@ -1,0 +1,16 @@
+package utility;
+
+/**
+ * 
+ * Konstantenklasse für Nachrichtenkommunikation. 
+ * Sollte nicht initialisiert werden!
+ * 
+ * @author Marius Kleiner, Dirk Kleiner
+ * @version 0.1a
+ *
+ */
+public final class MessageIdentifier {
+
+	//
+	public static int
+}

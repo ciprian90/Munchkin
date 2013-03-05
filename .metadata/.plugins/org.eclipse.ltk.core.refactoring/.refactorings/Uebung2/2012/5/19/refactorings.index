@@ -1,0 +1,5 @@
+1336386296283	Rename local variable 'copy'
+1336408860772	Rename method 'leftShiftAndAdd'
+1336415130351	Rename field 'seqNumCounter'
+1336423350326	Rename field 'lowerBound_send'
+1336423355814	Rename field 'upperBound_send'

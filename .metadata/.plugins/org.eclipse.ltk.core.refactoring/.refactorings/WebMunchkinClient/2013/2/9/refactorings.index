@@ -1,0 +1,20 @@
+1361814470966	Rename compilation unit 'Client.java'
+1361814506042	Rename type 'Server'
+1361817817392	Move package
+1361818790908	Rename type 'EchoClient'
+1361820370748	Rename package 'constants'
+1361830455837	Delete element
+1361837269434	Rename type 'loginMode'
+1361837470140	Rename type 'LoginMode'
+1361837486622	Move compilation unit
+1361839113899	Copy compilation unit
+1361842964210	Delete element
+1361843049822	Delete element
+1361843552212	Move compilation unit
+1361843604919	Move compilation unit
+1361843611653	Move compilation unit
+1361844541045	Rename field 'login'
+1361845065758	Delete element
+1361845068238	Delete element
+1361845071319	Delete element
+1361874811517	Rename type 'mainJFrame'

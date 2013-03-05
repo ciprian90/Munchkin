@@ -1,0 +1,209 @@
+package Server;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.net.ssl.SSLSocket;
+
+import utility.Constants;
+import utility.Utility;
+import utility.ComMsg;
+
+/**
+ * Diese Klasse verarbeitet die Kommunikation mit (je) einem Client
+ * 
+ * @author Marius Kleiner, Dirk Kleiner
+ * @version 0.1a
+ *
+ */
+public class ServerInstance implements Runnable{
+
+	// Klassenvariablen
+	public SSLSocket sslsocket = null;
+	public InputStream inputstream = null;
+	public ObjectInputStream objInStream = null;
+	// SQL
+	public static Connection sqlConnection = null;
+	public static java.sql.Statement sqlStatement = null;	// Enthält SQL Anfragestatements
+	public static ResultSet sqlResult = null;		// Enthält SQL Anfrageergebnisse
+	// Authentifizierung
+	boolean authentication = false;
+	
+	/**
+	 * Konstruktor
+	 * @param sslsocket 
+	 * @param sqlConnection 
+	 * 
+	 */
+	public ServerInstance(SSLSocket sslsocket, Connection sqlConnection) {
+		// Variablen
+		this.sslsocket = sslsocket;
+		this.sqlConnection = sqlConnection;
+		// Erstelle benötigte Streams
+		try {
+			inputstream = sslsocket.getInputStream();
+			objInStream = new ObjectInputStream(inputstream);
+		} catch (IOException e) {
+			Utility.errorMsg("Failed to create inputStream", e);
+		}
+	}
+	
+	/**
+	 * Runnable
+	 */
+	public void run() {
+		Object inObject = null;
+		// Warte auf eingehende Nachrichten (loop 4ever)
+        try {
+        	// Lese eine Zeile, bis es nichts mehr zu lesen gibt....
+			while ((inObject = objInStream.readObject()) != null) {
+				// Interpretiere erhaltene Nachricht
+				Utility.debugMsg("Receiving MessageObject");
+				parseMsg(inObject);
+			}
+		} catch (IOException | ClassNotFoundException e) {
+			// Fehler während aus bufferedReader gelesen wird, oder (wahscheinlicher)
+			// Verbindungsabbruch
+			Utility.debugMsg("Error while using bufferedReader or disconnected");
+		}finally{
+			// Release alle gebundenen Ressourcen
+			try {
+				objInStream.close();
+			} catch (IOException e) {
+				objInStream = null;
+			}
+			try {
+				inputstream.close();
+			} catch (IOException e) {
+				inputstream = null;
+			}
+		}
+        
+	}
+
+	/**
+	 * Verarbeite eingegangene Nachricht
+	 * @param inObject
+	 */
+	private void parseMsg(Object obj) {
+		// Prüfe Objekttyp und verfahre dementsprechend
+		if (obj instanceof utility.ComMsg) {
+			try {
+				// Caste zu einer comMsg
+				ComMsg msg = (ComMsg) obj;
+				// Prüfe Art der Nachricht
+				if (msg.getType().equals(ComMsg.com_authentication_request)) {
+					checkAuthentication(msg.getMsg());
+				}
+			} catch (wrongMessageException e) {
+				Utility.errorMsg("Broken messageObjekt or SQL request error", e);
+			}
+		}else{
+			Utility.debugMsg("Received unknown MessageObject");
+		}
+		
+	}
+
+	/**
+	 * Prüfe Logindaten
+	 * @param string 
+	 * @throws Exception 
+	 */
+	private void checkAuthentication(String string) throws wrongMessageException {
+		// String verarbeiten
+		String[] stringArray = string.split("\\|");
+		if (stringArray.length == 2) {
+			String login = stringArray[0];
+			String passwort = stringArray[1];
+			System.out.println(passwort + ";");
+			// Prüfe logindaten in der SQL Datenbank
+			// SQL Anfrage
+			ResultSet result = sqlRequest("*", "`account`", "`login` = '" + login + "'", Constants.sql_limit_standard);
+			// Prüfe, ob Ergebnis vorhanden
+			try {
+				if (result != null){
+					if (result.next()) {
+						if (result.getString("passwort").equals(passwort)) {
+							// Login angenommen
+							Utility.debugMsg("Login angenommen!");
+							// @Todo
+						}else{
+							System.out.println("1x");
+							// Keine korrekten Logindaten
+							throw new nackLoginException();
+						}
+					}else{
+						System.out.println("2x");
+						// Keine korrekten Logindaten
+						throw new nackLoginException();
+					}
+				}else{
+					System.out.println("3x");
+					// Keine korrekten Logindaten
+					throw new nackLoginException();
+				}
+			}catch(nackLoginException | SQLException e) {
+				// Die Loginanfrage wird abgewiesen
+				// @Todo
+				Utility.debugMsg("Login abgewiesen!");
+				e.printStackTrace();
+			}
+		}else{
+			throw new wrongMessageException();
+		}
+	}
+	
+	/**
+	 * Diese Exception wird bei fehlerhaften Nachrichten geworfen
+	 */
+	private class wrongMessageException extends Exception {
+	}
+	
+	/**
+	 * Diese Exception weist auf einen fehlgeschlagenen Login hin
+	 */
+	private class nackLoginException extends Exception {
+	}
+	
+	/**
+	 * Führe eine Anfrage an die SQL Datenbank aus
+	 * @return Ergebnis der Anfrage
+	 */
+	public static ResultSet sqlRequest(String select, String from, String where, String limit) {
+		try {
+			String request = "SELECT " + select + " FROM " + from + " WHERE " + where + " LIMIT " + limit;
+			sqlStatement = sqlConnection.createStatement();
+			if (sqlStatement.execute(request)) {
+				sqlResult = sqlStatement.getResultSet();
+				Utility.debugMsg("Gathered SQL request: " + request);
+				return sqlResult;
+		    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+    	    // Alle gebundenen Ressourcen wieder releasen (bzgl. MySQL Datenbank)
+			// Release statement
+    	    if (sqlStatement != null) {
+    	        try {
+    	        	sqlStatement.close();
+    	        } catch (SQLException sqlEx) { } // ignore
+    	        sqlStatement = null;
+    	    }
+    	    // Release result
+    	    if (sqlResult != null) {
+    	        try {
+    	        	sqlResult.close();
+    	        } catch (SQLException sqlEx) { } // ignore
+    	        sqlResult = null;
+    	    }
+		}
+		return null;
+	}
+
+}

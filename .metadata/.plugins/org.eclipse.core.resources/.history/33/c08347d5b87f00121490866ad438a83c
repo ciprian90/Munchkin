@@ -1,0 +1,49 @@
+package GUI;
+
+import java.awt.Dimension;
+
+import javax.swing.WindowConstants;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+
+import states.LoginState;
+
+
+/**
+* This code was edited or generated using CloudGarden's Jigloo
+* SWT/Swing GUI Builder, which is free for non-commercial
+* use. If Jigloo is being used commercially (ie, by a corporation,
+* company or business for any purpose whatever) then you
+* should purchase a license for each developer using Jigloo.
+* Please visit www.cloudgarden.com for details.
+* Use of Jigloo implies acceptance of these licensing terms.
+* A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR
+* THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
+* LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
+*/
+public class LoginJPanel extends javax.swing.JPanel {
+	private JTextField login;
+
+	public LoginJPanel(JFrame frame, LoginState state) {
+		super();
+		frame.getContentPane().add(this);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+		initGUI();
+	}
+	
+	private void initGUI() {
+		try {
+			setPreferredSize(new Dimension(400, 300));
+			{
+				login = new JTextField();
+				this.add(login);
+				login.setText("login");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}

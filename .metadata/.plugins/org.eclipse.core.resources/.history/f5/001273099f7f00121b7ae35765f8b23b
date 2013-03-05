@@ -1,0 +1,11 @@
+package utility;
+
+public class comMsg {
+
+	/**
+	 * 
+	 */
+	public comMsg() {
+		
+	}
+}

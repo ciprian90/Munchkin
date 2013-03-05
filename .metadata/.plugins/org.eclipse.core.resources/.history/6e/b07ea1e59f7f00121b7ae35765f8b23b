@@ -1,0 +1,23 @@
+package utility;
+
+/**
+ * Diese Klasse repräsentiert eine Netzwerknachricht
+ * 
+ * @author Marius Kleiner, Dirk Kleiner
+ * @version 0.1a
+ *
+ */
+public class comMsg {
+
+	// Klassenvariablen
+	private String msgType = null;
+	private String msg = null;
+	
+	/**
+	 * Konstruktor
+	 */
+	public comMsg(String type, String msg) {
+		this.msgType = type;
+		this.msg = msg;
+	}
+}

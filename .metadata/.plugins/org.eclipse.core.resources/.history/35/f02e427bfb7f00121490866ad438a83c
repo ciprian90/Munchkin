@@ -1,0 +1,28 @@
+package GUI;
+
+import java.awt.event.WindowEvent;
+
+import javax.swing.JFrame;
+
+/**
+ * 
+ * @author Marius
+ *
+ */
+public class mainJFrame extends JFrame{
+
+	//
+	private boolean closing = false;
+	
+	public void windowClosing(WindowEvent e) {
+		this.closing = true;
+	}
+	
+	/**
+	 * 
+	 */
+	public boolean isClosing(){
+		return closing;
+	}
+	
+}
