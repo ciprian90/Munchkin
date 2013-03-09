@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename local variable &apos;returnLenght&apos; in &apos;de.uni_stuttgart.ipvs.ids.communicationLib.crypto.XorCryptoProvider.addPadding(...)&apos; to &apos;returnLength&apos;&#x0D;&#x0A;- Original project: &apos;SocketLayerSecurity&apos;&#x0D;&#x0A;- Original element: &apos;de.uni_stuttgart.ipvs.ids.communicationLib.crypto.XorCryptoProvider.addPadding(byte[]).returnLenght&apos;&#x0D;&#x0A;- Renamed element: &apos;returnLenght&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;returnLenght&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;de.uni_stuttgart.ipvs.ids.communicationLib.crypto{XorCryptoProvider.java[XorCryptoProvider~addPadding~\[B@returnLenght!1660!1680!1664!1675!I!0!false" name="returnLength" references="true" stamp="1328789202306" version="1.0"/>
-</session>

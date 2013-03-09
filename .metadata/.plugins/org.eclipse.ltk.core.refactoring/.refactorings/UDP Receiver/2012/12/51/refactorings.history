@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Copy element &apos;UDPServer.java&apos; to &apos;Narzissa_Main/src/(default package)&apos;&#x0D;&#x0A;- Original project: &apos;UDP Receiver&apos;&#x0D;&#x0A;- Destination element: &apos;Narzissa_Main/src/(default package)&apos;&#x0D;&#x0A;- Original element: &apos;UDPServer.java&apos;" description="Copy compilation unit" destination="=Narzissa_Main/src&lt;" element1="/src&lt;{UDPServer.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1355756505990" units="1" version="1.0"/>
-</session>

@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Move package &apos;utility&apos; to &apos;WebMunchkinServer/src&apos;&#x0D;&#x0A;- Original project: &apos;WebMunchkinUtility&apos;&#x0D;&#x0A;- Destination element: &apos;WebMunchkinServer/src&apos;&#x0D;&#x0A;- Original element: &apos;WebMunchkinUtility/src/utility&apos;&#x0D;&#x0A;- Update references to refactored element" description="Move package" destination="=WebMunchkinServer/src" element1="/src&lt;utility" flags="589830" fragments="1" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.movePackages" stamp="1361830632257" version="1.0"/>
-</session>

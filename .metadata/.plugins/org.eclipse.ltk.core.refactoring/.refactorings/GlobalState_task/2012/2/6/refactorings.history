@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename type &apos;de.uni_stuttgart.ipvs.ids.globalstate.MoneyMessage&apos; to &apos;MonkeyMessage&apos;&#x0D;&#x0A;- Original project: &apos;GlobalState_task&apos;&#x0D;&#x0A;- Original element: &apos;de.uni_stuttgart.ipvs.ids.globalstate.MoneyMessage&apos;&#x0D;&#x0A;- Renamed element: &apos;de.uni_stuttgart.ipvs.ids.globalstate.MonkeyMessage&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;MoneyMessage&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;de.uni_stuttgart.ipvs.ids.globalstate{MoneyMessage.java[MoneyMessage" matchStrategy="1" name="MonkeyMessage" qualified="false" references="true" similarDeclarations="false" stamp="1328813606654" textual="false" version="1.0"/>
-</session>
