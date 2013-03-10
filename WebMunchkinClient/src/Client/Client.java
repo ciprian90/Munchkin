@@ -1,11 +1,14 @@
-package Client;
+package client;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import GUI.LoginJPanel;
-import GUI.MainJFrame;
+import error.CouldNotLoadFileException;
+import gui.LoginJPanel;
+import gui.MainJFrame;
+import gui.SplashScreen;
+
 
 import states.LoginState;
 import utility.Constants;
@@ -13,7 +16,15 @@ import utility.Utility;
 
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.UnknownHostException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 
 /**
  * WebMunchkin Login Client. Baut eine SSL (Secure Sockets Layer) gesicherte Verbindung zum
@@ -43,6 +54,10 @@ public class Client {
 		// Überprüfe Parameter
     	checkParameters(arstring);
     	
+    	// SplashScreen
+    	Utility.debugMsg("Create Splashscreen");
+    	SplashScreen splashscreen = new SplashScreen();
+    	
     	// Fenster öffnen
 		Utility.debugMsg("Create Window");
 		jFrame = new MainJFrame();
@@ -59,12 +74,14 @@ public class Client {
 		try {
 			// Setze SystemProperties für das Laden und öffnen der Zertifikatdatei
 	    	// Bekanntgabe des Zertifikatpfades (relativ) an das System
-	        System.setProperty("javax.net.ssl.trustStore", Constants.certificate_path);
+			System.setProperty("javax.net.ssl.trustStore", Constants.certificate_path);
+			
 	        // Bekanntgabe des Zertifikatpassworts an das System
 	        System.setProperty("javax.net.ssl.trustStorePassword", Constants.certificate_pw);
 	        
 	        // Erstelle einen SSL Socket für die Web-/Netz-Kommunikation
 	        SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+	        
 			sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", Constants.port);
 			
 	        // Erstelle einen Inputstream für Konsoleneingabe

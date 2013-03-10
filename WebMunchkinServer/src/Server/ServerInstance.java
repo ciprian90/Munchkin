@@ -159,7 +159,9 @@ public class ServerInstance implements Runnable{
 			String passwort = stringArray[1];
 			// Prüfe logindaten in der SQL Datenbank
 			// SQL Anfrage
-			ResultSet result = sqlRequest("*", "`account`", "`login` = '" + login + "'", Constants.sql_limit_standard);
+			ResultSet result = sqlRequest("*", "`" + SqlTableNames.sqlt_acc_account + "`", 
+					"`" + SqlTableNames.sqlt_acc_login + "` = '" + login + "'", 
+					Constants.sql_limit_standard);
 			// Prüfe, ob Ergebnis vorhanden
 			try {
 				if (result != null){

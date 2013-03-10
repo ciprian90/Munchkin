@@ -1,8 +1,12 @@
 package utility;
 
 import java.math.BigInteger;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import error.CouldNotLoadFileException;
+
 
 public final class Utility {
 
@@ -55,4 +59,19 @@ public final class Utility {
         }
         return md5;
     }
+	
+	/**
+	 * Lade eine Datei aus dem jar Archiv
+	 * @param path
+	 * @return URL des Files
+	 * @throws CouldNotLoadFileException 
+	 */
+	public static URL getFileURL(String path) throws CouldNotLoadFileException {
+		URL url = ClassLoader.getSystemResource(path);
+		if (url == null) {
+			throw new CouldNotLoadFileException(path);
+		}
+		return url;
+		
+	}
 }

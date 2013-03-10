@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -6,9 +6,10 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import client.Client;
+
 import utility.Utility;
 
-import Client.Client;
 
 /**
  * Programmhauptfenster

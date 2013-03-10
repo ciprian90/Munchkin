@@ -6,7 +6,8 @@ import java.io.ObjectOutputStream;
 
 import javax.swing.JPanel;
 
-import Client.Client;
+import client.Client;
+
 
 import utility.ComMsg;
 import utility.Utility;

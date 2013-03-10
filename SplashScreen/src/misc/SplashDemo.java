@@ -39,6 +39,8 @@ package misc;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
  
 public class SplashDemo extends Frame implements ActionListener {
     static void renderSplashFrame(Graphics2D g, int frame) {
@@ -63,7 +65,16 @@ public class SplashDemo extends Frame implements ActionListener {
         setMenuBar(mb);
         mb.add(m1);
         SplashScreen splash = SplashScreen.getSplashScreen();
-        //splash.setImageURL("images/party.gif");
+        
+        /**
+        try {
+			splash.setImageURL(new File("images/party.gif").toURI().toURL());
+		} catch (NullPointerException | IllegalStateException
+				| IOException e1) {
+			e1.printStackTrace();
+		}
+		*/
+        
         if (splash == null) {
             System.out.println("SplashScreen.getSplashScreen() returned null");
             return;

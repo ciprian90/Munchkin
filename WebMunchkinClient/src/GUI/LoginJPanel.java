@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 import com.cloudgarden.layout.AnchorConstraint;
 import com.cloudgarden.layout.AnchorLayout;
 import java.awt.BorderLayout;
