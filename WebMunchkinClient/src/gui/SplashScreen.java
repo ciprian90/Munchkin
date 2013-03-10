@@ -12,13 +12,25 @@ import error.CouldNotLoadFileException;
 import utility.Constants;
 import utility.Utility;
 
+/**
+ * Diese Klasse repräsentiert einen SplashScreen, 
+ * welcher zu Beginn des Programmstarts gezeigt wird.
+ * 
+ * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
+ * @version 0.1a
+ *
+ */
 @SuppressWarnings("serial")
-public class SplashScreen extends JFrame implements Runnable{
+public class SplashScreen extends JFrame{
 
+	// Klassenvariablen
 	private ImageIcon icon;
 	
+	/**
+	 * Konstruktor
+	 */
     public SplashScreen() {
-        // Lade Image
+        // Lade das SplashScreen Bild
     	URL img = null;
 		try {
 			img = Utility.getFileURL(Constants.img_splashscreen);
@@ -44,7 +56,7 @@ public class SplashScreen extends JFrame implements Runnable{
         // Sichtbar machen
         this.setVisible(true);
         
-        
+        // Vorläufiger 2 Sekunden wait-Timer
         for (int i = 0; i < 2; i++) {
 			try {
 				Thread.sleep(1000);
@@ -52,11 +64,9 @@ public class SplashScreen extends JFrame implements Runnable{
 				e.printStackTrace();
 			}
 		}
+        
+        // Schließe den Splashscreen
 		this.dispose();
-		
-        // Starte Thread
-        //Thread t = new Thread(this);
-        //t.start();
     }
 
     /**
@@ -65,17 +75,4 @@ public class SplashScreen extends JFrame implements Runnable{
     public void paint(Graphics g){
     	g.drawImage(icon.getImage(), 0, 0, null, this);
     }
-
-	@Override
-	public void run() {
-		for (int i = 0; i < 2; i++) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		this.dispose();
-		System.out.println("DISPOSE");
-	}
 }

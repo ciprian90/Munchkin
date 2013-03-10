@@ -5,10 +5,11 @@ import java.io.Serializable;
 /**
  * Diese Klasse repräsentiert eine Netzwerknachricht
  * 
- * @author Marius Kleiner, Dirk Kleiner
+ * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
  * @version 0.1a
  *
  */
+@SuppressWarnings("serial")
 public class ComMsg implements Serializable{
 
 	// Klassenvariablen

@@ -9,7 +9,6 @@ import utility.Utility;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -19,10 +18,11 @@ import com.mysql.jdbc.*;	// DON'T REMOVE THIS! (import com.mysql.jdbc.*;)
  * WebMunchkin Login Server. Nimmt SSL (Secure Sockets Layer) gesicherte Verbindungen von
  * WebMunchkinClients an.
  * 
- * @author Marius Kleiner, Dirk Kleiner
+ * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
  * @version 0.1a
  *
  */
+@SuppressWarnings("unused")
 public class Server {
 	
 	// Klassenvariablen
@@ -80,8 +80,9 @@ public class Server {
 	*/
 
 	/**
-     * Überprüfe und verarbeite die gesetzten Programmparameter 
-     */
+	 * Überprüfe und verarbeite die gesetzten Programmparameter 
+	 * @param arstring
+	 */
     private static void checkParameters(String[] arstring) {
     	// Check known parameters in arstring
     	for (String val : arstring) {

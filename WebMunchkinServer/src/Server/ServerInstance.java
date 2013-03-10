@@ -1,9 +1,7 @@
 package Server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -13,6 +11,9 @@ import java.sql.SQLException;
 
 import javax.net.ssl.SSLSocket;
 
+import error.NackLoginException;
+import error.WrongMessageException;
+
 import utility.Constants;
 import utility.SqlTableNames;
 import utility.Utility;
@@ -21,7 +22,7 @@ import utility.ComMsg;
 /**
  * Diese Klasse verarbeitet die Kommunikation mit (je) einem Client
  * 
- * @author Marius Kleiner, Dirk Kleiner
+ * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
  * @version 0.1a
  *
  */
@@ -46,6 +47,7 @@ public class ServerInstance implements Runnable{
 	 * @param sqlConnection 
 	 * 
 	 */
+	@SuppressWarnings("static-access")
 	public ServerInstance(SSLSocket sslsocket, Connection sqlConnection) throws IOException {
 		// Variablen
 		this.sslsocket = sslsocket;
@@ -125,7 +127,7 @@ public class ServerInstance implements Runnable{
 
 	/**
 	 * Verarbeite eingegangene Nachricht
-	 * @param inObject
+	 * @param obj
 	 */
 	private void parseMsg(Object obj) {
 		// Prüfe Objekttyp und verfahre dementsprechend
@@ -137,7 +139,7 @@ public class ServerInstance implements Runnable{
 				if (msg.getType().equals(ComMsg.com_authentication_request)) {
 					checkAuthentication(msg.getMsg());
 				}
-			} catch (wrongMessageException e) {
+			} catch (WrongMessageException e) {
 				Utility.errorMsg("Broken messageObjekt or SQL request error", e);
 			}
 		}else{
@@ -149,9 +151,9 @@ public class ServerInstance implements Runnable{
 	/**
 	 * Prüfe Logindaten
 	 * @param string 
-	 * @throws Exception 
+	 * @throws WrongMessageException 
 	 */
-	private void checkAuthentication(String string) throws wrongMessageException {
+	private void checkAuthentication(String string) throws WrongMessageException {
 		// String verarbeiten
 		String[] stringArray = string.split("\\|");
 		if (stringArray.length == 2) {
@@ -172,28 +174,29 @@ public class ServerInstance implements Runnable{
 							Utility.debugMsg("Login angenommen!");
 						}else{
 							// Keine korrekten Logindaten
-							throw new nackLoginException();
+							throw new NackLoginException();
 						}
 					}else{
 						// Keine korrekten Logindaten
-						throw new nackLoginException();
+						throw new NackLoginException();
 					}
 				}else{
 					// Keine korrekten Logindaten
-					throw new nackLoginException();
+					throw new NackLoginException();
 				}
-			}catch(nackLoginException | SQLException e) {
+			}catch(NackLoginException | SQLException e) {
 				// Die Loginanfrage wird abgewiesen
 				answerLoginRequest(false);
 				Utility.debugMsg("Login abgewiesen!");
 			}
 		}else{
-			throw new wrongMessageException();
+			throw new WrongMessageException();
 		}
 	}
 	
 	/**
 	 * Sende eine Antwort auf die Login Anfrage
+	 * @param answer
 	 */
 	public void answerLoginRequest(boolean answer) {
 		try {
@@ -208,18 +211,6 @@ public class ServerInstance implements Runnable{
 		} catch (IOException e) {
 			Utility.errorMsg("Error while sending message to client", e);
 		}
-	}
-	
-	/**
-	 * Diese Exception wird bei fehlerhaften Nachrichten geworfen
-	 */
-	private class wrongMessageException extends Exception {
-	}
-	
-	/**
-	 * Diese Exception weist auf einen fehlgeschlagenen Login hin
-	 */
-	private class nackLoginException extends Exception {
 	}
 	
 	/**

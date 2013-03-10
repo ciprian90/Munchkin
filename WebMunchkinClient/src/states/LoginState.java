@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.swing.JPanel;
-
 import client.Client;
 
 
@@ -15,7 +13,7 @@ import utility.Utility;
 /**
  * Diese Klasse repräsentiert den Zustand des Programms während dem Einloggen
  * 
- * @author Marius Kleiner, Dirk Kleiner
+ * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
  * @version 0.1a
  *
  */
@@ -38,6 +36,9 @@ public class LoginState implements Runnable{
 	
 	/**
 	 * Führe eine LoginAnfrage durch
+	 * @param login
+	 * @param pw
+	 * @return Erfolg des Loginversuchs
 	 */
 	public boolean doLoginRequest(String login, String pw) {
 		try {
@@ -52,6 +53,7 @@ public class LoginState implements Runnable{
 	}
 
 	/**
+	 * Run
 	 * Höre auf Antwort(en)
 	 */
 	public void run() {

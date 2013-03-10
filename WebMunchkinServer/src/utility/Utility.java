@@ -4,7 +4,7 @@ package utility;
  * 
  * Stellt nützliche Hilfsfunktionen bereit.
  *  
- * @author Marius Kleiner, Dirk Kleiner
+ * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
  * @version 0.1a
  *
  */

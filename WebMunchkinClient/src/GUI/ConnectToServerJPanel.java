@@ -1,14 +1,8 @@
 package gui;
 
 import java.awt.Dimension;
-import javax.swing.JEditorPane;
-import javax.swing.JFormattedTextField;
-
-import javax.swing.WindowConstants;
-import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 
 /**
 * This code was edited or generated using CloudGarden's Jigloo
@@ -22,6 +16,7 @@ import javax.swing.JTextPane;
 * THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
 * LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
 */
+@SuppressWarnings("serial")
 public class ConnectToServerJPanel extends javax.swing.JPanel {
 	private JProgressBar statusBar;
 	private JTextField statusField;
@@ -30,12 +25,14 @@ public class ConnectToServerJPanel extends javax.swing.JPanel {
 	* Auto-generated main method to display this 
 	* JPanel inside a new JFrame.
 	*/
-		
 	public ConnectToServerJPanel() {
 		super();
 		initGUI();
 	}
 	
+	/**
+	 * Initialisiere die GUI für den LoginScreen
+	 */
 	private void initGUI() {
 		try {
 			setPreferredSize(new Dimension(400, 300));

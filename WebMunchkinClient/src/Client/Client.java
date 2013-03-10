@@ -1,36 +1,23 @@
 package client;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import error.CouldNotLoadFileException;
 import gui.LoginJPanel;
 import gui.MainJFrame;
 import gui.SplashScreen;
-
 
 import states.LoginState;
 import utility.Constants;
 import utility.Utility;
 
-
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 
 /**
  * WebMunchkin Login Client. Baut eine SSL (Secure Sockets Layer) gesicherte Verbindung zum
- * WebMunchkinServer auf.
+ * WebMunchkinServer auf und startet den Programmablauf.
  * 
- * @author Marius Kleiner, Dirk Kleiner
+ * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
  * @version 0.1a
  *
  */
@@ -50,13 +37,18 @@ public class Client {
 	static Thread stateThread = null;
 	static boolean close = false;
 	
+	/**
+	 * MAIN
+	 * @param arstring
+	 */
 	public static void main(String[] arstring) {
 		// Überprüfe Parameter
     	checkParameters(arstring);
     	
     	// SplashScreen
     	Utility.debugMsg("Create Splashscreen");
-    	SplashScreen splashscreen = new SplashScreen();
+    	@SuppressWarnings("unused")
+		SplashScreen splashscreen = new SplashScreen();
     	
     	// Fenster öffnen
 		Utility.debugMsg("Create Window");
@@ -81,7 +73,6 @@ public class Client {
 	        
 	        // Erstelle einen SSL Socket für die Web-/Netz-Kommunikation
 	        SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-	        
 			sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", Constants.port);
 			
 	        // Erstelle einen Inputstream für Konsoleneingabe

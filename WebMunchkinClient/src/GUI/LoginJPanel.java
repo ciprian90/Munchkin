@@ -1,9 +1,6 @@
 package gui;
 import com.cloudgarden.layout.AnchorConstraint;
 import com.cloudgarden.layout.AnchorLayout;
-import java.awt.BorderLayout;
-
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -28,7 +25,9 @@ import utility.Utility;
 * THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
 * LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
 */
+@SuppressWarnings("serial")
 public class LoginJPanel extends javax.swing.JPanel {
+	@SuppressWarnings("unused")
 	private JFrame frame;
 	private LoginState state;
 	private JTextField username;

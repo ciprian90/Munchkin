@@ -4,20 +4,18 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import client.Client;
 
 import utility.Utility;
 
-
 /**
  * Programmhauptfenster
  * 
- * @author Marius Kleiner, Dirk Kleiner
+ * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
  * @version 0.1a
  *
  */
+@SuppressWarnings("serial")
 public class MainJFrame extends JFrame{
 
 	// Klassenvariablen

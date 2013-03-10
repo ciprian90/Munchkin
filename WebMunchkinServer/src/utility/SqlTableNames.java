@@ -5,7 +5,7 @@ package utility;
  * Konstantenklasse für SQL Tabellenbezeichnungen. 
  * Sollte nicht initialisiert werden!
  * 
- * @author Marius Kleiner, Dirk Kleiner
+ * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
  * @version 0.1a
  *
  */

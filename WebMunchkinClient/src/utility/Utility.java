@@ -7,7 +7,14 @@ import java.security.NoSuchAlgorithmException;
 
 import error.CouldNotLoadFileException;
 
-
+/**
+ * Die Utility-Klasse stellt nützliche Funktionen für
+ * das Programm bereit
+ * 
+ * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
+ * @version 0.1a
+ *
+ */
 public final class Utility {
 
 	// Temporäre Variablen
@@ -25,6 +32,8 @@ public final class Utility {
 	
 	/**
 	 * Gebe eine Fehermeldung auf der Konsole aus und beende das Programm
+	 * @param str
+	 * @param e
 	 */
 	public static void errorMsg(String str, Exception e) {
 		// Fehlerausgabe
