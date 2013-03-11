@@ -13,23 +13,27 @@ import utility.Utility;
  * 
  * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
  * @version 0.1a
- *
+ * 
  */
 @SuppressWarnings("serial")
-public class MainJFrame extends JFrame{
+public class MainJFrame extends JFrame
+{
 
 	// Klassenvariablen
-	
+
 	/**
 	 * Konstruktor
 	 */
-	public MainJFrame() {
+	public MainJFrame()
+	{
 		// Folgender Befehl löscht den Fensterrahmen (LauncherAnzeige)
 		// setUndecorated(true);
-		
+
 		// Definiere Aktion beim schließen des Fensters
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
+		addWindowListener(new WindowAdapter()
+		{
+			public void windowClosing(WindowEvent e)
+			{
 				Utility.debugMsg("Window closed!");
 				Client.closeClient();
 			}

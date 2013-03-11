@@ -24,9 +24,10 @@ import utility.ComMsg;
  * 
  * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
  * @version 0.1a
- *
+ * 
  */
-public class ServerInstance implements Runnable{
+public class ServerInstance implements Runnable
+{
 
 	// Klassenvariablen
 	public SSLSocket sslsocket = null;
@@ -36,19 +37,23 @@ public class ServerInstance implements Runnable{
 	public ObjectOutputStream objOutStream = null;
 	// SQL
 	public static Connection sqlConnection = null;
-	public static java.sql.Statement sqlStatement = null;	// Enthält SQL Anfragestatements
-	public static ResultSet sqlResult = null;		// Enthält SQL Anfrageergebnisse
+	public static java.sql.Statement sqlStatement = null; // Enthält SQL
+															// Anfragestatements
+	public static ResultSet sqlResult = null; // Enthält SQL Anfrageergebnisse
 	// Authentifizierung
 	boolean authentication = false;
-	
+
 	/**
 	 * Konstruktor
-	 * @param sslsocket 
-	 * @param sqlConnection 
+	 * 
+	 * @param sslsocket
+	 * @param sqlConnection
 	 * 
 	 */
 	@SuppressWarnings("static-access")
-	public ServerInstance(SSLSocket sslsocket, Connection sqlConnection) throws IOException {
+	public ServerInstance(SSLSocket sslsocket, Connection sqlConnection)
+			throws IOException
+	{
 		// Variablen
 		this.sslsocket = sslsocket;
 		this.sqlConnection = sqlConnection;
@@ -58,175 +63,252 @@ public class ServerInstance implements Runnable{
 		outputstream = sslsocket.getOutputStream();
 		objOutStream = new ObjectOutputStream(outputstream);
 	}
-	
+
 	/**
 	 * Runnable
 	 */
-	public void run() {
+	public void run()
+	{
 		Object inObject = null;
 		// Warte auf eingehende Nachrichten (loop 4ever)
-        try {
-        	// Lese eine Zeile, bis es nichts mehr zu lesen gibt....
-			while ((inObject = objInStream.readObject()) != null) {
+		try
+		{
+			// Lese eine Zeile, bis es nichts mehr zu lesen gibt....
+			while ((inObject = objInStream.readObject()) != null)
+			{
 				// Interpretiere erhaltene Nachricht
 				Utility.debugMsg("Receiving MessageObject");
 				parseMsg(inObject);
 			}
-		} catch (IOException | ClassNotFoundException e) {
-			// Fehler während aus bufferedReader gelesen wird, oder (wahscheinlicher)
+		}
+		catch (IOException | ClassNotFoundException e)
+		{
+			// Fehler während aus bufferedReader gelesen wird, oder
+			// (wahscheinlicher)
 			// Verbindungsabbruch
 			Utility.debugMsg("Client disconnected");
-		}finally{
+		}
+		finally
+		{
 			closeConnection();
 		}
 	}
-	
+
 	/**
 	 * Schließe diese Verbindung
 	 */
-	public void closeConnection() {
+	public void closeConnection()
+	{
 		// Release alle gebundenen Ressourcen
-		try {
+		try
+		{
 			objOutStream.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			objOutStream = null;
 		}
-		try {
+		try
+		{
 			outputstream.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			outputstream = null;
 		}
-		try {
+		try
+		{
 			objInStream.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			objInStream = null;
 		}
-		try {
+		try
+		{
 			inputstream.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			inputstream = null;
 		}
-		try {
+		try
+		{
 			sslsocket.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			sslsocket = null;
 		}
-	    if (sqlResult != null) {
-	        try {
-	        	sqlResult.close();
-	        } catch (SQLException sqlEx) { } // ignore
-	        sqlResult = null;
-	    }
-	    if (sqlStatement != null) {
-	        try {
-	        	sqlStatement.close();
-	        } catch (SQLException sqlEx) { } // ignore
-	        sqlStatement = null;
-	    }
+		if (sqlResult != null)
+		{
+			try
+			{
+				sqlResult.close();
+			}
+			catch (SQLException sqlEx)
+			{} // ignore
+			sqlResult = null;
+		}
+		if (sqlStatement != null)
+		{
+			try
+			{
+				sqlStatement.close();
+			}
+			catch (SQLException sqlEx)
+			{} // ignore
+			sqlStatement = null;
+		}
 	}
 
 	/**
 	 * Verarbeite eingegangene Nachricht
+	 * 
 	 * @param obj
 	 */
-	private void parseMsg(Object obj) {
+	private void parseMsg(Object obj)
+	{
 		// Prüfe Objekttyp und verfahre dementsprechend
-		if (obj instanceof utility.ComMsg) {
-			try {
+		if (obj instanceof utility.ComMsg)
+		{
+			try
+			{
 				// Caste zu einer comMsg
 				ComMsg msg = (ComMsg) obj;
 				// Prüfe Art der Nachricht
-				if (msg.getType().equals(ComMsg.com_authentication_request)) {
+				if (msg.getType().equals(ComMsg.com_authentication_request))
+				{
 					checkAuthentication(msg.getMsg());
 				}
-			} catch (WrongMessageException e) {
+			}
+			catch (WrongMessageException e)
+			{
 				Utility.errorMsg("Broken messageObjekt or SQL request error", e);
 			}
-		}else{
+		}
+		else
+		{
 			Utility.debugMsg("Received unknown MessageObject");
 		}
-		
+
 	}
 
 	/**
 	 * Prüfe Logindaten
-	 * @param string 
-	 * @throws WrongMessageException 
+	 * 
+	 * @param string
+	 * @throws WrongMessageException
 	 */
-	private void checkAuthentication(String string) throws WrongMessageException {
+	private void checkAuthentication(String string)
+			throws WrongMessageException
+	{
 		// String verarbeiten
 		String[] stringArray = string.split("\\|");
-		if (stringArray.length == 2) {
+		if (stringArray.length == 2)
+		{
 			String login = stringArray[0];
 			String passwort = stringArray[1];
 			// Prüfe logindaten in der SQL Datenbank
 			// SQL Anfrage
-			ResultSet result = sqlRequest("*", "`" + SqlTableNames.sqlt_acc_account + "`", 
-					"`" + SqlTableNames.sqlt_acc_login + "` = '" + login + "'", 
+			ResultSet result = sqlRequest("*", "`"
+					+ SqlTableNames.sqlt_acc_account + "`", "`"
+					+ SqlTableNames.sqlt_acc_login + "` = '" + login + "'",
 					Constants.sql_limit_standard);
 			// Prüfe, ob Ergebnis vorhanden
-			try {
-				if (result != null){
-					if (result.next()) {
-						if (result.getString(SqlTableNames.sqlt_acc_pw).equals(passwort)) {
+			try
+			{
+				if (result != null)
+				{
+					if (result.next())
+					{
+						if (result.getString(SqlTableNames.sqlt_acc_pw).equals(
+								passwort))
+						{
 							// Login angenommen
 							answerLoginRequest(true);
 							Utility.debugMsg("Login angenommen!");
-						}else{
+						}
+						else
+						{
 							// Keine korrekten Logindaten
 							throw new NackLoginException();
 						}
-					}else{
+					}
+					else
+					{
 						// Keine korrekten Logindaten
 						throw new NackLoginException();
 					}
-				}else{
+				}
+				else
+				{
 					// Keine korrekten Logindaten
 					throw new NackLoginException();
 				}
-			}catch(NackLoginException | SQLException e) {
+			}
+			catch (NackLoginException | SQLException e)
+			{
 				// Die Loginanfrage wird abgewiesen
 				answerLoginRequest(false);
 				Utility.debugMsg("Login abgewiesen!");
 			}
-		}else{
+		}
+		else
+		{
 			throw new WrongMessageException();
 		}
 	}
-	
+
 	/**
 	 * Sende eine Antwort auf die Login Anfrage
+	 * 
 	 * @param answer
 	 */
-	public void answerLoginRequest(boolean answer) {
-		try {
+	public void answerLoginRequest(boolean answer)
+	{
+		try
+		{
 			ComMsg loginAnsw = null;
-			if (answer) {
+			if (answer)
+			{
 				loginAnsw = new ComMsg(ComMsg.com_authentication_ack, "");
-			}else{
+			}
+			else
+			{
 				loginAnsw = new ComMsg(ComMsg.com_authentication_nack, "");
 			}
 			Utility.debugMsg("Sending login request answer");
 			objOutStream.writeObject(loginAnsw);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			Utility.errorMsg("Error while sending message to client", e);
 		}
 	}
-	
+
 	/**
 	 * Führe eine Anfrage an die SQL Datenbank aus
+	 * 
 	 * @return Ergebnis der Anfrage
 	 */
-	public static ResultSet sqlRequest(String select, String from, String where, String limit) {
-		try {
-			String request = "SELECT " + select + " FROM " + from + " WHERE " + where + " LIMIT " + limit;
+	public static ResultSet sqlRequest(String select, String from,
+			String where, String limit)
+	{
+		try
+		{
+			String request = "SELECT " + select + " FROM " + from + " WHERE "
+					+ where + " LIMIT " + limit;
 			sqlStatement = sqlConnection.createStatement();
-			if (sqlStatement.execute(request)) {
+			if (sqlStatement.execute(request))
+			{
 				sqlResult = sqlStatement.getResultSet();
 				Utility.debugMsg("Gathered SQL request: " + request);
 				return sqlResult;
-		    }
-		} catch (SQLException e) {
+			}
+		}
+		catch (SQLException e)
+		{
 			e.printStackTrace();
 		}
 		return null;

@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 
 import client.Client;
 
-
 import utility.ComMsg;
 import utility.Utility;
 
@@ -15,59 +14,74 @@ import utility.Utility;
  * 
  * @author Dirk Kleiner, Karsten Schatz, Marius Kleiner
  * @version 0.1a
- *
+ * 
  */
-public class LoginState implements Runnable{
-	
+public class LoginState implements Runnable
+{
+
 	// Klassenvariablen
 	private ObjectOutputStream objOutStream = null;
 	private ObjectInputStream objInStream = null;
 
 	/**
 	 * Konstruktor
+	 * 
 	 * @param objOutStream
 	 * @param objInStream
 	 */
-	public LoginState(ObjectOutputStream objOutStream, ObjectInputStream objInStream) {
+	public LoginState(ObjectOutputStream objOutStream,
+			ObjectInputStream objInStream)
+	{
 		// Setze Variablen
 		this.objInStream = objInStream;
 		this.objOutStream = objOutStream;
 	}
-	
+
 	/**
 	 * Führe eine LoginAnfrage durch
+	 * 
 	 * @param login
 	 * @param pw
 	 * @return Erfolg des Loginversuchs
 	 */
-	public boolean doLoginRequest(String login, String pw) {
-		try {
-			ComMsg loginMsg = new ComMsg(ComMsg.com_authentication_request, login + "|" + pw);
+	public boolean doLoginRequest(String login, String pw)
+	{
+		try
+		{
+			ComMsg loginMsg = new ComMsg(ComMsg.com_authentication_request,
+					login + "|" + pw);
 			Utility.debugMsg("Sending authentication login data...");
 			objOutStream.writeObject(loginMsg);
 			return true;
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			Utility.errorMsg("Couldn't connect to Server", e);
 		}
 		return false;
 	}
 
 	/**
-	 * Run
-	 * Höre auf Antwort(en)
+	 * Run Höre auf Antwort(en)
 	 */
-	public void run() {
+	public void run()
+	{
 		Object inObject = null;
 		// Warte auf eingehende Nachrichten (loop 4ever)
-        try {
-        	// Lese eine Zeile, bis es nichts mehr zu lesen gibt....
-			while ((inObject = objInStream.readObject()) != null) {
+		try
+		{
+			// Lese eine Zeile, bis es nichts mehr zu lesen gibt....
+			while ((inObject = objInStream.readObject()) != null)
+			{
 				// Interpretiere erhaltene Nachricht
 				Utility.debugMsg("Receiving MessageObject");
 				parseMsg(inObject);
 			}
-		} catch (IOException | ClassNotFoundException e) {
-			// Fehler während aus bufferedReader gelesen wird, oder (wahscheinlicher)
+		}
+		catch (IOException | ClassNotFoundException e)
+		{
+			// Fehler während aus bufferedReader gelesen wird, oder
+			// (wahscheinlicher)
 			// Verbindungsabbruch
 			Utility.debugMsg("Client disconnected");
 			Client.closeClient();
@@ -76,20 +90,28 @@ public class LoginState implements Runnable{
 
 	/**
 	 * Verarbeite eingegangene Nachricht
+	 * 
 	 * @param inObject
 	 */
-	private void parseMsg(Object obj) {
+	private void parseMsg(Object obj)
+	{
 		// Prüfe Objekttyp und verfahre dementsprechend
-		if (obj instanceof utility.ComMsg) {
+		if (obj instanceof utility.ComMsg)
+		{
 			// Caste zu einer comMsg
 			ComMsg msg = (ComMsg) obj;
 			// Prüfe Art der Nachricht
-			if (msg.getType().equals(ComMsg.com_authentication_ack)) {
+			if (msg.getType().equals(ComMsg.com_authentication_ack))
+			{
 				Utility.debugMsg("Login has been accepted");
-			}else if (msg.getType().equals(ComMsg.com_authentication_nack)) {
+			}
+			else if (msg.getType().equals(ComMsg.com_authentication_nack))
+			{
 				Utility.debugMsg("Login has been declined");
 			}
-		}else{
+		}
+		else
+		{
 			Utility.debugMsg("Received unknown MessageObject");
 		}
 	}
