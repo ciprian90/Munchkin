@@ -27,5 +27,5 @@ public final class Constants
 
 	// Bilder
 	public static String img_standard_path = "images/";
-	public static String img_splashscreen = img_standard_path + "splash.jpg";
+	public static String img_splashscreen = img_standard_path + "splash.png";
 }

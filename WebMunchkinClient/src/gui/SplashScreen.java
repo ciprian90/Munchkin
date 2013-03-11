@@ -1,9 +1,12 @@
 package gui;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 
-import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import error.CouldNotLoadFileException;
@@ -24,7 +27,7 @@ public class SplashScreen extends JFrame
 {
 
 	// Klassenvariablen
-	private ImageIcon icon;
+	private BufferedImage icon;
 
 	/**
 	 * Konstruktor
@@ -41,19 +44,28 @@ public class SplashScreen extends JFrame
 		{
 			Utility.errorMsg("Could not load file from path " + e.path, e);
 		}
-		icon = new ImageIcon(img);
+
+		try
+		{
+			icon = ImageIO.read(img);
+		}
+		catch (IOException e1)
+		{
+			Utility.errorMsg("Could not open file", e1);
+		}
 
 		// Setze SplashScreengröße(n)
-		this.setPreferredSize(new Dimension(icon.getIconWidth(), icon
-				.getIconHeight()));
-		this.setSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-		this.setMinimumSize(new Dimension(icon.getIconWidth(), icon
-				.getIconHeight()));
+		this.setPreferredSize(new Dimension(icon.getWidth(), icon.getHeight()));
+		this.setSize(new Dimension(icon.getWidth(), icon.getHeight()));
+		this.setMinimumSize(new Dimension(icon.getWidth(), icon.getHeight()));
 
 		// Window Einstellungen
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setUndecorated(true);
+
+		// Setze Hintergrund auf durchsichtig
+		this.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.0f));
 		pack();
 
 		// Fensterposition mittig setzen
@@ -84,6 +96,6 @@ public class SplashScreen extends JFrame
 	 */
 	public void paint(Graphics g)
 	{
-		g.drawImage(icon.getImage(), 0, 0, null, this);
+		g.drawImage(icon, 0, 0, null, this);
 	}
 }
