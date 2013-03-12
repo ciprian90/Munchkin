@@ -96,7 +96,7 @@ public class Server
 			Class.forName("com.mysql.jdbc.Driver");
 			// Establish SQL connection
 			sqlConnection = DriverManager.getConnection("jdbc:mysql://"
-					+ Constants.sql_server + ":3306/" + Constants.sql_db_name,
+					+ Constants.sql_server + ":" + Constants.sql_port + "/" + Constants.sql_db_name,
 					Constants.sql_db_username, Constants.sql_db_pw);
 			// Konsolenausgabe, wenn die Verbindung erfolgreich aufgebaut wurde
 			Utility.debugMsg("SQL-Connection successfully established");

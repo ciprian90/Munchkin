@@ -26,10 +26,11 @@ public final class Constants
 	public static String certificate_pw = "display99";
 
 	// SQL Datenbank
-	public static String sql_server = "127.0.0.1";
-	public static String sql_db_name = "munchkin";
-	public static String sql_db_username = "munchkin";
-	public static String sql_db_pw = "munchkin";
+	public static String sql_server = "db4free.net";
+	public static String sql_port = "3306";
+	public static String sql_db_name = "webmunchkin";
+	public static String sql_db_username = "webmunchkin";
+	public static String sql_db_pw = "webmunchkin";
 	public static String sql_limit_standard = "0 , 30";
 
 	// Pfade für Jar-Dateien
