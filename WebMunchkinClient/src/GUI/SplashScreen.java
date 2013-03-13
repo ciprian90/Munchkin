@@ -64,7 +64,7 @@ public class SplashScreen extends JFrame
 		setResizable(false);
 		setUndecorated(true);
 
-		// Setze Hintergrund auf durchsichtig
+		// Setze Hintergrund auf Durchsichtigkeit
 		this.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.0f));
 		pack();
 

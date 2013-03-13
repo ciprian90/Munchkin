@@ -4,6 +4,7 @@ import com.cloudgarden.layout.AnchorLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 
 import javax.swing.WindowConstants;
 import javax.swing.JFrame;
@@ -29,6 +30,7 @@ public class LoginJPanel extends javax.swing.JPanel
 	private JFrame frame;
 	private LoginState state;
 	private JTextField username;
+	private JCheckBox jCheckBox1;
 	private JButton loginButton;
 	private JTextField password;
 
@@ -56,6 +58,12 @@ public class LoginJPanel extends javax.swing.JPanel
 			this.setPreferredSize(new java.awt.Dimension(400, 300));
 			this.setSize(new java.awt.Dimension(400, 300));
 			this.setBackground(new java.awt.Color(0, 0, 0));
+			{
+				jCheckBox1 = new JCheckBox();
+				this.add(jCheckBox1, new AnchorConstraint(288, 631, 388, 258, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL, AnchorConstraint.ANCHOR_REL));
+				jCheckBox1.setText("jCheckBox1");
+				jCheckBox1.setPreferredSize(new java.awt.Dimension(149, 30));
+			}
 			{
 				loginButton = new JButton();
 				this.add(loginButton, new AnchorConstraint(418, 896, 495, 646,
