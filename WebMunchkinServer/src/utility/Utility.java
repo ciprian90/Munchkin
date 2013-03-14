@@ -1,5 +1,7 @@
 package utility;
 
+import java.util.Random;
+
 /**
  * 
  * Stellt nützliche Hilfsfunktionen bereit.
@@ -44,5 +46,30 @@ public final class Utility
 			e.printStackTrace();
 		}
 		System.exit(0);
+	}
+	
+	/**
+	 * Generates a Salt-String of length 16
+	 * 
+	 * @return
+	 */
+	public static String generateSalt()
+	{
+		// initialize Randomizer
+		Random random = new Random(System.currentTimeMillis());
+		// list possible characters
+		String text = "abcdefghijklmnopqrstuvwxyz"
+				+ "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "!§$%&/()=?" + "1234567890";
+		char[] chars = text.toCharArray();
+
+		// build String of length 16
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 16; i++)
+		{
+			char c = chars[random.nextInt(chars.length)];
+			sb.append(c);
+		}
+
+		return sb.toString();
 	}
 }

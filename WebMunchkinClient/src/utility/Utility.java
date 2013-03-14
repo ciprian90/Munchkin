@@ -1,6 +1,5 @@
 package utility;
 
-import java.math.BigInteger;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -53,32 +52,47 @@ public final class Utility
 	}
 
 	/**
-	 * Hasht die Eingabe als MD5 Hash
+	 * Hasht die Eingabe als SHA-512 Hash
 	 * 
 	 * @param input
 	 * @return
 	 */
-	public static String md5(String input)
+	public static String sha512(String input, String salt)
 	{
-		String md5 = null;
+		String sha512 = null;
 		if (null == input)
 			return null;
 
 		try
 		{
-			// Create MessageDigest object for MD5
-			MessageDigest digest = MessageDigest.getInstance("MD5");
-			// Update input string in message digest
-			digest.update(input.getBytes(), 0, input.length());
-			// Converts message digest value in base 16 (hex)
-			md5 = new BigInteger(1, digest.digest()).toString(16);
+			// get Instance of the Hasher
+			MessageDigest digest = MessageDigest.getInstance("SHA-512");
+			// hash the text+salt
+			digest.update((input + salt).getBytes());
+			
+			// get the hashed byte-array
+			byte[] bytes = digest.digest();
+			sha512 = "";
 
+			// since we need a Hex-formatted String we have to convert the
+			// byte-array into it
+			for (int i = 0; i < bytes.length; i++)
+			{
+				String s = Integer.toHexString(new Byte(bytes[i]));
+				while (s.length() < 2)
+				{
+					s = "0" + s;
+				}
+				s = s.substring(s.length() - 2);
+				sha512 += s;
+			}
 		}
 		catch (NoSuchAlgorithmException e)
 		{
-			errorMsg("Error while trying to MD5 hash", e);
+			errorMsg("Error while trying to SHA-512 hash", e);
 		}
-		return md5;
+
+		return sha512;
 	}
 
 	/**
