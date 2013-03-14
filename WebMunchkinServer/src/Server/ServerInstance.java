@@ -38,7 +38,7 @@ public class ServerInstance implements Runnable
 	// SQL
 	public static Connection sqlConnection = null;
 	public static java.sql.Statement sqlStatement = null; // Enthält SQL
-															// Anfragestatements
+	// Anfragestatements
 	public static ResultSet sqlResult = null; // Enthält SQL Anfrageergebnisse
 	// Authentifizierung
 	boolean authentication = false;

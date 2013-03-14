@@ -3,7 +3,6 @@
 #################
 
 *.pydevproject
-.project
 .metadata
 bin/
 tmp/
@@ -27,3 +26,6 @@ local.properties
 
 # PDT-specific
 .buildpath
+
+# MARIUS
+UpdateTestApplication/
